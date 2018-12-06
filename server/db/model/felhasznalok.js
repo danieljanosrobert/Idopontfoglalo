@@ -4,7 +4,7 @@ const Joi = require('joi')
 const schema = Joi.object().keys({
   email: Joi.string().email({ minDomainAtoms: 2 }).required(),
   jelszo: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
-  szuletesi_ido: Joi.date().max('now').required(),
+  szuletesi_ido: Joi.date().max('now').min('1-1-1900').required(),
   felhasznalonev: Joi.string().alphanum().min(3).max(30).required(),
   teljes_nev: Joi.string().required()
 })
