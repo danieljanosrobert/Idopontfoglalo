@@ -15,9 +15,9 @@
       </li>
     </ul> -->
     <div class="row">
-      <div class="col-sm-6" v-for="felhasznalo in reversedFelhasznalok" :key=felhasznalo._id >
+      <div class="col-sm-6" v-for="felhasznalo in reversedFelhasznalok" :key="felhasznalo._id">
         <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
-          <div class="card-header">@{{felhasznalo.felhasznalonev}}</div>
+          <div class="card-header">@{{felhasznalo.felhasznalonev}} <button @click="remove(felhasznalo._id)" class="btn btn-info" style="float: right; margin:-5px" >törlés</button> </div>
           <div class="card-body">
             <h4 class="card-title">Teljes név: {{felhasznalo.teljes_nev}}</h4>
             <p class="card-text"> e-mail: {{felhasznalo.email}}
@@ -47,6 +47,11 @@ export default {
     fetch(API_URL).then(response => response.json()).then(result => {
       this.felhasznalok = result
     })
+  },
+  methods: {
+    remove (index) {
+      console.log(index)
+    }
   }
 }
 </script>

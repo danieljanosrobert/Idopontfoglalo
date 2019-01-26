@@ -9,7 +9,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#/register">Regisztráció <span class="sr-only">(current)</span></a>
+            <router-link class="nav-link" to="/register">Regisztráció <span class="sr-only">(current)</span></router-link>
           </li>
         </ul>
       </div>

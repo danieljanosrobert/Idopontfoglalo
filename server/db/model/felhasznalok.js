@@ -23,7 +23,9 @@ function create (felhasznalo) {
   }
 }
 
+
 module.exports = {
   create,
-  getFelhasznalok
+  getFelhasznalok,
+  deleteFelhasznalo
 }

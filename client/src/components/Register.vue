@@ -85,7 +85,7 @@
 /* import AuthenticationService from '@/services/AuthenticationService' */
 const API_URL = 'http://localhost:8082/felhasznalok'
 export default {
-  naem: 'home',
+  name: 'Register',
   data: () => ({
     felhasznalok: [],
     felhasznalo: {
@@ -114,6 +114,7 @@ export default {
         }
       }).then(response => response.json()).then(result => {
         this.felhasznalok.push(result)
+        this.$router.push('/')
       })
     }
   }
