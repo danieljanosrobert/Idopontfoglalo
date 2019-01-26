@@ -33,6 +33,15 @@ app.post('/felhasznalok', async (req, res) => {
   })
 })
 
+app.delete('/felhasznalok', async (req, res) => {
+  felhasznalok.deleteFelhasznalo(req.body).then((felhasznalo) => {
+    res.json(felhasznalo)
+  }).catch((error) => {
+    res.status(500)
+    res.json(error)
+  })
+})
+
 app.post('/register', async (req, res) => {
   res.send({
     message: `Hello ${req.body.email}! Your user was registered! Have fun!`

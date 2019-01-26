@@ -22,7 +22,9 @@ function create (felhasznalo) {
     return Promise.reject(result.error)
   }
 }
-
+function deleteFelhasznalo (felhasznalo) {
+  return felhasznalok.remove({ _id: felhasznalo._id })
+}
 
 module.exports = {
   create,

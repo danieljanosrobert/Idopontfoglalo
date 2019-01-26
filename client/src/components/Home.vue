@@ -17,7 +17,7 @@
     <div class="row">
       <div class="col-sm-6" v-for="felhasznalo in reversedFelhasznalok" :key="felhasznalo._id">
         <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
-          <div class="card-header">@{{felhasznalo.felhasznalonev}} <button @click="remove(felhasznalo._id)" class="btn btn-info" style="float: right; margin:-5px" >törlés</button> </div>
+          <div class="card-header">@{{felhasznalo.felhasznalonev}} <button @click="deleteFelhasznalo(felhasznalo._id)" class="btn btn-info" style="float: right; margin:-5px" >törlés</button> </div>
           <div class="card-body">
             <h4 class="card-title">Teljes név: {{felhasznalo.teljes_nev}}</h4>
             <p class="card-text"> e-mail: {{felhasznalo.email}}
@@ -36,7 +36,10 @@ const API_URL = 'http://localhost:8082/felhasznalok'
 export default {
   name: 'Home',
   data: () => ({
-    felhasznalok: []
+    felhasznalok: [],
+    felhasznalo: {
+      _id: ''
+    }
   }),
   computed: {
     reversedFelhasznalok () {
@@ -49,8 +52,17 @@ export default {
     })
   },
   methods: {
-    remove (index) {
-      console.log(index)
+    deleteFelhasznalo (index) {
+      this.felhasznalo._id = index
+      console.log(this.felhasznalo._id)
+      fetch(API_URL, {
+        method: 'DELETE',
+        body: JSON.stringify(this.felhasznalo),
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
+      this.felhasznalok.splice(-1, 1)
     }
   }
 }
