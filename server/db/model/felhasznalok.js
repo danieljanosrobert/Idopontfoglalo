@@ -3,9 +3,9 @@ const Joi = require('joi')
 
 const schema = Joi.object().keys({
   email: Joi.string().email({ minDomainAtoms: 2 }).required(),
-  jelszo: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
-  szuletesi_ido: Joi.date().max('now').min('1-1-1900').required(),
-  felhasznalonev: Joi.string().alphanum().min(3).max(30).required(),
+  jelszo: Joi.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,15}$/).required(),
+  szuletesi_ido: Joi.string().regex(/^(([12]\d{3})-([1-9]|0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/).required(),
+  felhasznalonev: Joi.string().regex(/^((?!.*[_\s-]{2,})[a-zA-Z0-9][a-zA-Z0-9_\s\\-]{2,10}[a-zA-Z0-9])$/).required(),
   teljes_nev: Joi.string().required()
 })
 

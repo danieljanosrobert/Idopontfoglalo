@@ -21,16 +21,24 @@
       <div class="form-row">
         <div class="form-group col-md-4 mb-3">
           <label for="email">Email cím</label>
-          <input type="email"
+          <input type="email" oninvalid="this.setCustomValidity('Valami')"
+            oninput="this.setCustomValidity('23')"
             class="form-control" id="email"
             v-model="felhasznalo.email"
             placeholder="Email cím" required
           >
+          <div class="valid-feedback">
+            Looks good!
+          </div>
         </div>
         <div class="form-group col-md-4 mb-3">
           <label for="jelszo">Jelszó</label>
           <input type="password"
             class="form-control" id="jelszo"
+            onblur="checkValidity()"
+            oninvalid="this.setCustomValidity('A jelszó így kell kinézzen:');"
+            oninput="this.setCustomValidity('')"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,15}$"
             v-model="felhasznalo.jelszo"
             placeholder="Jelszó" required
           >
@@ -53,7 +61,7 @@
       <div class="form-row">
         <div class="form-group col-md-6 mb-4">
           <label for="szuletesi_ido">Születési idő</label>
-          <input type="text"
+          <input type="date"
             class="form-control" id="szuletesi_ido"
             v-model="felhasznalo.szuletesi_ido"
             placeholder="NN-HH-EEEE" required
@@ -63,8 +71,8 @@
           <label for="teljes_nev">Teljes név</label>
           <input type="text"
             class="form-control" id="teljes_nev"
-            v-model="felhasznalo.teljes_nev"
-            placeholder="Teljes név" required
+            v-model="felhasznalo.teljes_nev" name="name"
+            placeholder="Teljes név" style="text-transform: capitalize;" required
           >
         </div>
       </div>

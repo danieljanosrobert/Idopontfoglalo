@@ -15,9 +15,9 @@
       </li>
     </ul> -->
     <div class="row">
-      <div class="col-sm-6" v-for="felhasznalo in reversedFelhasznalok" :key="felhasznalo._id">
+      <div class="col-6 col-md-4" v-for="(felhasznalo,i) in reversedFelhasznalok" :key="felhasznalo._id">
         <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
-          <div class="card-header">@{{felhasznalo.felhasznalonev}} <button @click="deleteFelhasznalo(felhasznalo._id)" class="btn btn-info" style="float: right; margin:-5px" >törlés</button> </div>
+          <div class="card-header">@{{felhasznalo.felhasznalonev}} <button @click="deleteFelhasznalo(felhasznalo._id,i)" class="btn btn-info" style="float: right; margin:-5px" >törlés</button> </div>
           <div class="card-body">
             <h4 class="card-title">Teljes név: {{felhasznalo.teljes_nev}}</h4>
             <p class="card-text"> e-mail: {{felhasznalo.email}}
@@ -52,9 +52,8 @@ export default {
     })
   },
   methods: {
-    deleteFelhasznalo (index) {
+    deleteFelhasznalo (index, i) {
       this.felhasznalo._id = index
-      console.log(this.felhasznalo._id)
       fetch(API_URL, {
         method: 'DELETE',
         body: JSON.stringify(this.felhasznalo),
@@ -62,7 +61,7 @@ export default {
           'content-type': 'application/json'
         }
       })
-      this.felhasznalok.splice(-1, 1)
+      this.felhasznalok.splice(((-1 * i) - 1), 1)
     }
   }
 }
