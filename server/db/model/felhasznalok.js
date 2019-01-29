@@ -6,7 +6,7 @@ const schema = Joi.object().keys({
   jelszo: Joi.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,15}$/).required(),
   szuletesi_ido: Joi.string().regex(/^(([12]\d{3})-([1-9]|0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/).required(),
   felhasznalonev: Joi.string().regex(/^((?!.*[_\s-]{2,})[a-zA-Z0-9][a-zA-Z0-9_\s\\-]{2,10}[a-zA-Z0-9])$/).required(),
-  teljes_nev: Joi.string().required()
+  teljes_nev: Joi.string().regex(/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{3,30}$/u).required()
 })
 
 const felhasznalok = db.get('felhasznalok')

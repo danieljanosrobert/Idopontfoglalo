@@ -13,7 +13,7 @@ app.use(cors())
 
 app.get('/', async (req, res) => {
   res.json({
-    message: 'full stack message board!'
+    message: 'Ez itt a szerver oldal, az itteni tevékenységeket nehezebben tudod követni sajnos :(!'
   })
 })
 
@@ -24,7 +24,6 @@ app.get('/felhasznalok', async (req, res) => {
 })
 
 app.post('/felhasznalok', async (req, res) => {
-  console.log(req.body)
   felhasznalok.create(req.body).then((felhasznalo) => {
     res.json(felhasznalo)
   }).catch((error) => {

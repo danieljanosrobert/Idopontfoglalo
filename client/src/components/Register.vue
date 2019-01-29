@@ -1,47 +1,42 @@
 <template>
   <div>
     <h1 class="mb-3 mt-3">Regisztráció</h1>
-    <!-- <input
-      type="email"
-      name="email"
-      v-model="email"
-      placeholder="email"/>
-    <br>
-    <input
-      type="password"
-      name="password"
-      v-model="password"
-      placeholder="password"/>
-    <br>
-    <button
-      @click="register">
-      Register
-    </button> -->
-    <form @submit.prevent="register">
+    <form @submit.prevent="register" novalidate class="needs-validation">
       <div class="form-row">
         <div class="form-group col-md-4 mb-3">
           <label for="email">Email cím</label>
-          <input type="email" oninvalid="this.setCustomValidity('Valami')"
-            oninput="this.setCustomValidity('23')"
-            class="form-control" id="email"
+          <input type="email"
+            class="form-control"
+            v-bind:class="[((submitStatus === '')?''
+              :((!$v.email.required || !$v.email.email)
+              ?'is-invalid':'is-valid'))]"
+            id="email"
             v-model="felhasznalo.email"
-            placeholder="Email cím" required
+            placeholder="Email cím"
+            v-model.trim="$v.email.$model"
           >
-          <div class="valid-feedback">
-            Looks good!
+          <div class="error"  v-if="!(submitStatus === '')
+            && (!$v.email.required || !$v.email.email)">
+              Nem megfelelő email formátum!
           </div>
         </div>
         <div class="form-group col-md-4 mb-3">
           <label for="jelszo">Jelszó</label>
           <input type="password"
-            class="form-control" id="jelszo"
-            onblur="checkValidity()"
-            oninvalid="this.setCustomValidity('A jelszó így kell kinézzen:');"
-            oninput="this.setCustomValidity('')"
-            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,15}$"
+            class="form-control"
+            v-bind:class="[((submitStatus === '')?'':
+              ((!$v.password.required || !$v.password.regPassword)
+                ?'is-invalid':'is-valid'))]"
+            id="jelszo"
             v-model="felhasznalo.jelszo"
-            placeholder="Jelszó" required
+            placeholder="Jelszó"
+            v-model.trim="$v.password.$model"
           >
+          <div class="error" v-if="!(submitStatus === '')
+            && (!$v.password.required || !$v.password.regPassword)">
+              A jelszónak tartalmaznia kell legalább egy kisbetűt, egy nagybetűt,
+              egy számot. A jelszó hossza minimum 6, maximum 30 karakter.
+          </div>
         </div>
         <div class="col-md-4 mb-3">
           <label for="felhasznalonev">Felhasználónév</label>
@@ -50,11 +45,21 @@
               <span class="input-group-text">@</span>
             </div>
             <input type="text"
-              class="form-control" id="felhasznalonev"
+              class="form-control"
+              v-bind:class="[((submitStatus === '')?''
+                :((!$v.uname.required || !$v.uname.regUname)
+                ?'is-invalid':'is-valid'))]"
+              id="felhasznalonev"
               placeholder="Felhasználónév"
               v-model="felhasznalo.felhasznalonev"
-              required
+              v-model.trim="$v.uname.$model"
             >
+          </div>
+          <div class="error" v-if="!(submitStatus === '')
+            && (!$v.uname.required || !$v.uname.regUname)">
+              A felhasználónév hossza minimum 4, maximum 12 karakter.
+              Tartalmazhat betűket, számokat, szóközt, "_" és "-"" karaktereket.
+              Speciális karakter a felhasználónév elején, vagy végén nem megengedett!
           </div>
         </div>
       </div>
@@ -62,36 +67,77 @@
         <div class="form-group col-md-6 mb-4">
           <label for="szuletesi_ido">Születési idő</label>
           <input type="date"
-            class="form-control" id="szuletesi_ido"
+            class="form-control"
+            v-bind:class="[((submitStatus === '')?''
+              :((!$v.date.required || !$v.date.regDate || !$v.date.maxValue)
+              ?'is-invalid':'is-valid'))]"
+            id="szuletesi_ido"
             v-model="felhasznalo.szuletesi_ido"
-            placeholder="NN-HH-EEEE" required
+            v-model.trim="$v.date.$model"
           >
+          <div class="error" v-if="!(submitStatus === '')
+            && (!$v.date.required || !$v.date.regDate || !$v.date.maxValue)">
+              Kérem válasszon reális dátumot!
+          </div>
         </div>
         <div class="col-md-6 mb-4">
           <label for="teljes_nev">Teljes név</label>
           <input type="text"
-            class="form-control" id="teljes_nev"
-            v-model="felhasznalo.teljes_nev" name="name"
-            placeholder="Teljes név" style="text-transform: capitalize;" required
+            class="form-control"
+            v-bind:class="[((submitStatus === '')?''
+              :((!$v.name.required || !$v.name.regName)
+              ?'is-invalid':'is-valid'))]"
+            id="teljes_nev"
+            v-model="felhasznalo.teljes_nev"
+            name="name"
+            placeholder="Teljes név"
+            v-model.trim="$v.name.$model"
           >
+          <div class="error" v-if="!(submitStatus === '')
+            && (!$v.name.required || !$v.name.regName)">
+              Nem megfelelő név formátum!
+          </div>
         </div>
       </div>
       <div class="form-group">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="gridCheck" required>
+          <input type="checkbox"
+            class="form-check-input"
+            v-bind:class="[((submitStatus === '')?''
+              :((!$v.check.required)?'is-invalid':'is-valid'))]"
+            id="gridCheck"
+            v-model.trim="$v.check.$model">
           <label class="form-check-label" for="gridCheck">
-            Szerződések elfogadása
+            Szerződések elfogadása<b style="color: red">*</b>
           </label>
+          <div class="error" v-if="!(submitStatus === '') && (!$v.check.required)">
+              Szerződések elfogadása kötelező!
+          </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Felhasználó létrehozása</button>
+      <button type="submit"
+        class="btn btn-primary">
+          Felhasználó létrehozása
+      </button>
+      <p class="error" v-if="submitStatus === 'ERROR'">
+        Javítsa ki a hibákat, majd kattintson újra a "Felhasználó létrehozása" gombra!
+      </p>
     </form>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
+import Vuelidate from 'vuelidate'
+import { required, helpers, email } from 'vuelidate/lib/validators'
+Vue.use(Vuelidate)
+
 /* import AuthenticationService from '@/services/AuthenticationService' */
 const API_URL = 'http://localhost:8082/felhasznalok'
+const regPassword = helpers.regex('password', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,15}$/)
+const regUname = helpers.regex('uname', /^((?!.*[_\s-]{2,})[a-zA-Z0-9][a-zA-Z0-9_\s\\-]{2,10}[a-zA-Z0-9])$/)
+const regDate = helpers.regex('date', /^(([12]\d{3})-([1-9]|0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/)
+const regName = helpers.regex('name', /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{3,30}$/u)
 export default {
   name: 'Register',
   data: () => ({
@@ -102,33 +148,66 @@ export default {
       szuletesi_ido: '',
       felhasznalonev: '',
       teljes_nev: ''
-    }
+    },
+    submitStatus: '',
+    email: '',
+    password: '',
+    uname: '',
+    date: '',
+    name: '',
+    check: ''
   }),
+  validations: {
+    email: {
+      required,
+      email
+    },
+    password: {
+      required,
+      regPassword
+    },
+    uname: {
+      required,
+      regUname
+    },
+    date: {
+      required,
+      regDate,
+      maxValue: value => value < new Date().toISOString()
+    },
+    name: {
+      required,
+      regName
+    },
+    check: {
+      required
+    }
+  },
   methods: {
     async register () {
-      /* await AuthenticationService.register({
-        email: this.email,
-        jelszo: this.jelszo,
-        szuletesi_ido: this.szuletesi_ido,
-        felhasznalonev: this.felhasznalonev,
-        teljes_nev: this.teljes_nev
-      }) */
-      console.log(this.felhasznalo)
-      fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify(this.felhasznalo),
-        headers: {
-          'content-type': 'application/json'
-        }
-      }).then(response => response.json()).then(result => {
-        this.felhasznalok.push(result)
-        this.$router.push('/')
-      })
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.submitStatus = 'ERROR'
+      } else {
+        fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify(this.felhasznalo),
+          headers: {
+            'content-type': 'application/json'
+          }
+        }).then(response => response.json()).then(result => {
+          this.felhasznalok.push(result)
+          this.$router.push('/')
+        })
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-
+  .error{
+    color:red;
+    font-size: 12px;
+  }
 </style>
