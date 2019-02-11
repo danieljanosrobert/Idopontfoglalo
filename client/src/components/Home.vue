@@ -1,19 +1,10 @@
 <template>
   <div>
     <h1 class="mb-3 mt-3">Felhasználók</h1>
-<!--     <ul class="list-unstyled">
-      <li class="media" v-for="felhasznalo in reversedFelhasznalok" :key=felhasznalo._id>
-        <img v-if="felhasznalo.kep" class="mr-3" src="" :alt="felhasznalo.teljes_nev">
-        <div class="media-body">
-          <h4 class="mt-0 mb-1">{{felhasznalo.felhasznalonev}}</h4>
-          <h5 class="mt-0 mb-1">{{felhasznalo.teljes_nev}}</h5>
-          {{felhasznalo.email}}
-          <br />
-          <small>{{felhasznalo.szuletesi_ido}}</small>
-          <hr>
-        </div>
-      </li>
-    </ul> -->
+    <br />
+    <button @click="dels()" class="btn btn-info">Session erase</button>
+    <br />
+    <br />
     <div class="row">
       <div class="col-6 col-md-4" v-for="(felhasznalo,i) in reversedFelhasznalok" :key="felhasznalo._id">
         <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
@@ -62,6 +53,9 @@ export default {
         }
       })
       this.felhasznalok.splice(((-1 * i) - 1), 1)
+    },
+    dels () {
+      this.$session.destroy()
     }
   }
 }

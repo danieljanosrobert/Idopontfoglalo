@@ -4,6 +4,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 
 const felhasznalok = require('../db/model/felhasznalok')
+const raeresek = require('../db/model/raeresek')
 
 const app = express()
 
@@ -44,6 +45,12 @@ app.delete('/felhasznalok', async (req, res) => {
 app.post('/register', async (req, res) => {
   res.send({
     message: `Hello ${req.body.email}! Your user was registered! Have fun!`
+  })
+})
+
+app.get('/raeresek', async (req, res) => {
+  raeresek.getRaeresek(req.query.arg).then(raeresek => {
+    res.json(raeresek)
   })
 })
 

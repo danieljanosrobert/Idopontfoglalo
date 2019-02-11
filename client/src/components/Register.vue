@@ -1,10 +1,9 @@
 <template>
-  <div>
-    <h1 class="mb-3 mt-3">Regisztráció</h1>
+  <div class="register">
+    <h1 class="mb-3 mt-3" align="center">Regisztráció</h1>
+    <br />
     <form @submit.prevent="register" novalidate class="needs-validation">
-      <div class="form-row">
-        <div class="form-group col-md-4 mb-3">
-          <label for="email">Email cím</label>
+        <div class="form-group">
           <input type="email"
             class="form-control"
             v-bind:class="[((submitStatus === '')?''
@@ -20,9 +19,8 @@
               Nem megfelelő email formátum!
           </div>
         </div>
-        <div class="form-group col-md-4 mb-3">
-          <label for="jelszo">Jelszó</label>
-          <input type="password"
+        <div class="form-group">
+            <input type="password"
             class="form-control"
             v-bind:class="[((submitStatus === '')?'':
               ((!$v.password.required || !$v.password.regPassword)
@@ -38,9 +36,8 @@
               egy számot. A jelszó hossza minimum 6, maximum 30 karakter.
           </div>
         </div>
-        <div class="col-md-4 mb-3">
-          <label for="felhasznalonev">Felhasználónév</label>
-          <div class="input-group">
+        <div class="form-group">
+            <div class="input-group">
             <div class="input-group-prepend">
               <span class="input-group-text">@</span>
             </div>
@@ -62,26 +59,7 @@
               Speciális karakter a felhasználónév elején, vagy végén nem megengedett!
           </div>
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6 mb-4">
-          <label for="szuletesi_ido">Születési idő</label>
-          <input type="date"
-            class="form-control"
-            v-bind:class="[((submitStatus === '')?''
-              :((!$v.date.required || !$v.date.regDate || !$v.date.maxValue)
-              ?'is-invalid':'is-valid'))]"
-            id="szuletesi_ido"
-            v-model="felhasznalo.szuletesi_ido"
-            v-model.trim="$v.date.$model"
-          >
-          <div class="error" v-if="!(submitStatus === '')
-            && (!$v.date.required || !$v.date.regDate || !$v.date.maxValue)">
-              Kérem válasszon reális dátumot!
-          </div>
-        </div>
-        <div class="col-md-6 mb-4">
-          <label for="teljes_nev">Teljes név</label>
+        <div class="form-group">
           <input type="text"
             class="form-control"
             v-bind:class="[((submitStatus === '')?''
@@ -98,30 +76,44 @@
               Nem megfelelő név formátum!
           </div>
         </div>
-      </div>
-      <div class="form-group">
-        <div class="form-check">
-          <input type="checkbox"
-            class="form-check-input"
+        <div class="form-group">
+          <label class="datelabel" for="szuletesi_ido">Születési idő:</label>
+          <input type="date"
+            class="form-control"
             v-bind:class="[((submitStatus === '')?''
-              :((!$v.check.required)?'is-invalid':'is-valid'))]"
-            id="gridCheck"
-            v-model.trim="$v.check.$model">
-          <label class="form-check-label" for="gridCheck">
-            Szerződések elfogadása<b style="color: red">*</b>
-          </label>
+              :((!$v.date.required || !$v.date.regDate || !$v.date.maxValue)
+              ?'is-invalid':'is-valid'))]"
+            id="szuletesi_ido"
+            v-model="felhasznalo.szuletesi_ido"
+            v-model.trim="$v.date.$model"
+          >
+          <div class="error" v-if="!(submitStatus === '')
+            && (!$v.date.required || !$v.date.regDate || !$v.date.maxValue)">
+              Kérem válasszon reális dátumot!
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <input type="checkbox"
+              class="form-check-input"
+              v-bind:class="[((submitStatus === '')?''
+                :((!$v.check.required)?'is-invalid':'is-valid'))]"
+              id="gridCheck"
+              v-model.trim="$v.check.$model">
+            <label class="form-check-label" for="gridCheck">
+              Szerződések elfogadása<b style="color: red">*</b>
+            </label>
           <div class="error" v-if="!(submitStatus === '') && (!$v.check.required)">
               Szerződések elfogadása kötelező!
           </div>
+         </div>
         </div>
-      </div>
-      <button type="submit"
-        class="btn btn-primary">
-          Felhasználó létrehozása
-      </button>
-      <p class="error" v-if="submitStatus === 'ERROR'">
-        Javítsa ki a hibákat, majd kattintson újra a "Felhasználó létrehozása" gombra!
-      </p>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Felhasználó létrehozása</button>
+        </div>
+        <p class="error" v-if="submitStatus === 'ERROR'">
+          Javítsa ki a hibákat, majd kattintson újra a "Felhasználó létrehozása" gombra!
+        </p>
     </form>
   </div>
 </template>
@@ -206,8 +198,27 @@ export default {
 </script>
 
 <style scoped>
+  .datelabel {
+    font-size: 16px;
+    margin: auto;
+    color: gray;
+    --font-family-sans-serif: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
   .error{
     color:red;
     font-size: 12px;
+  }
+  .register{
+    width: 600px;
+    height: 320px;
+    margin-top: 50px;
+    position:absolute; /*it can be fixed too*/
+    left:0; right:0;
+    top:0; bottom:0;
+
+    /*this to solve "the content will not be cut when the window is smaller than the content": */
+    max-width:100%;
+    max-height:100%;
   }
 </style>
