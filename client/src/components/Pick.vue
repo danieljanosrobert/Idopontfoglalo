@@ -25,21 +25,44 @@
 </template>
 
 <script>
-const API_URL_GET = 'http://localhost:8082/raeresek?arg='
+import AuthenticationService from '@/services/AuthenticationService'
+import helperFunctions from '@/functions/helperFunctions'
 
 export default {
   name: 'Time',
   data: () => ({
-    raeresek: []
+    raeresek: [],
+    doc: ''
   }),
   mounted () {
-    this.fetch()
+    helperFunctions.isAunthicated()
+    // this.fetch()
   },
   methods: {
-    fetch () {
-      fetch(API_URL_GET.concat(this.$session.get('doc'))).then(response => response.json()).then(result => {
-        this.raeresek = result
-      })
+    /* fetch () {
+      if (this.$session.get('doc') !== undefined) {
+        fetch(API_URL_GET.concat(this.$session.get('doc'))).then(response => response.json()).then(result => {
+          this.raeresek = result
+        })
+      }
+    },
+    */
+    async fetch () {
+      if (this.$session.get('doc') !== undefined) {
+        try {
+          this.doc = this.$session.get('doc')
+          const response = await AuthenticationService.pick({
+            doc: this.doc
+          })
+          if (response.data === 'unauthorized') {
+            this.$router.push('/login')
+            return
+          }
+          this.raeresek = response.data
+        } catch (error) {
+          console.log(error)
+        }
+      }
     },
     addss () {
       this.$session.set('doc', '5c5d3daccce24f04eb734c5c')

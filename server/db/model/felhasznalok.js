@@ -14,6 +14,7 @@ const felhasznalok = db.get('felhasznalok')
 function getFelhasznalok () {
   return felhasznalok.find()
 }
+
 function create (felhasznalo) {
   const result = Joi.validate(felhasznalo, schema)
   if (result.error == null) {
@@ -22,12 +23,51 @@ function create (felhasznalo) {
     return Promise.reject(result.error)
   }
 }
+
 function deleteFelhasznalo (felhasznalo) {
   return felhasznalok.remove({ _id: felhasznalo._id })
+}
+
+function getFelhasznalo (arg1, arg2) {
+  return felhasznalok.find({ email: arg1, jelszo: arg2 })
+}
+
+function isExistingFelhasznalo (arg1, arg2, callback) {
+  felhasznalok.count({ $and: [{ email: arg1, jelszo: arg2 }] }, function (err, result) {
+    if (err) {
+      callback(err)
+    } else {
+      callback(result)
+    }
+  })
+}
+
+function isExistingEmail (arg1, callback) {
+  felhasznalok.count({ $and: [{ email: arg1 }] }, function (err, result) {
+    if (err) {
+      callback(err)
+    } else {
+      callback(result)
+    }
+  })
+}
+
+function isExistingUname (arg1, callback) {
+  felhasznalok.count({ $and: [{ felhasznalonev: arg1 }] }, function (err, result) {
+    if (err) {
+      callback(err)
+    } else {
+      callback(result)
+    }
+  })
 }
 
 module.exports = {
   create,
   getFelhasznalok,
-  deleteFelhasznalo
+  getFelhasznalo,
+  deleteFelhasznalo,
+  isExistingFelhasznalo,
+  isExistingEmail,
+  isExistingUname
 }
