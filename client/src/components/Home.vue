@@ -38,6 +38,7 @@ export default {
     }
   },
   mounted () {
+    this.$session.set('redirect', '/')
     fetch(API_URL).then(response => response.json()).then(result => {
       this.felhasznalok = result
     })
