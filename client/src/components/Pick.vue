@@ -40,18 +40,10 @@
                 <div class="top-info" ref="days"><span>{{nap.nap}}</span></div>
 
                 <ul>
-                  <li class="single-event" data-start="09:30" data-end="10:30" data-content="event-abs-circuit" data-event="event-1">
-                    <a href="#0">
-                    </a>
-                  </li>
-
-                  <li class="single-event" data-start="11:00" data-end="12:30" data-content="event-rowing-workout" data-event="event-2">
-                    <a href="#0">
-                    </a>
-                  </li>
-
-                  <li class="single-event" data-start="14:00" data-end="15:15"  data-content="event-yoga-1" data-event="event-3">
-                    <a href="#0">
+                  <li class="single-event" v-for="(raeres) in raeresek[0].raeresek" v-bind:key="raeres.id"
+                   v-if="(raeres.nap == nap.id)" :data-start="raeres.kezdeti_idopont"
+                   :data-end="raeres.veg_idopont" data-event="event-1">
+                    <a href="/asldkléasdkéalsdkf">
                     </a>
                   </li>
                 </ul>
@@ -61,7 +53,7 @@
         <div class="cover-laye56r"></div>
       </div> <!-- .cd-schedule -->
 
-        <div v-bind:style="{visibility: cardVisibility}" class="col-6 col-md-4" v-for="(raeres) in raeresek[0].raeresek" :key="raeres.nap">
+<!--         <div v-bind:style="{visibility: cardVisibility}" class="col-6 col-md-4" v-for="(raeres) in raeresek[0].raeresek" :key="raeres.nap">
           <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
             <div class="card-header">nap: {{raeres.nap}} </div>
             <div class="card-body">
@@ -71,7 +63,7 @@
                 <small>Időköz: {{raeres.idokoz}}</small></p>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -95,9 +87,11 @@ export default {
       { id: 7, nap: 'Vasárnap' }
     ],
     raeresek: [{raeresek: [{nap: null, kezdeti_idopont: null, veg_idopont: null, idokoz: null}]}],
+    isLoggedIn: true,
     /* Session */
     doc: '',
     /* Schedule variables */
+    isSet: false,
     isLoading: true,
     areChildrenSetUp: false,
     deltaTime: 0,
@@ -112,9 +106,9 @@ export default {
     if (!helperFunctions.isAunthicated()) {
       this.$session.set('redirect', 'timetable')
       this.$router.push('/login')
+      this.isLoggedIn = false
     }
     this.fetch()
-    this.schedulePlan()
     this.$nextTick(function () {
       window.addEventListener('resize', this.getWindowWidth)
 
@@ -123,6 +117,10 @@ export default {
     })
   },
   updated () {
+    if (!this.isSet) {
+      this.isSet = true
+      this.schedulePlan()
+    }
     if (this.$session.get('doc') !== undefined) {
       this.cardVisibility = 'visible'
     }
@@ -145,7 +143,6 @@ export default {
       for (let i = 0; i < this.singleEvents.length; i++) {
         this.eventSlotHeight = this.$refs.days[0].offsetHeight
         let self = this.singleEvents[i]
-
         let start = this.getScheduleTimeStamp(self.getAttribute('data-start'))
         let eventLength = this.getScheduleTimeStamp(self.getAttribute('data-end')) - start
 
@@ -156,7 +153,9 @@ export default {
       }
     },
     getWindowWidth (event) {
-      this.scheduleReset()
+      if (this.isLoggedIn && this.isSet) {
+        this.scheduleReset()
+      }
     },
     scheduleReset () {
       let layout = this.getLayout()
@@ -218,7 +217,7 @@ export default {
       }
     },
     addss () {
-      this.$session.set('doc', '5c72f291e57c982b20fd43da')
+      this.$session.set('doc', '5c8d713f90347a1a886f2d0c')
       this.fetch()
       this.singleEvents[2].children[0].children[0].textContent = 'alma'
     },
